@@ -1,5 +1,5 @@
 class Invoice < ApplicationRecord
-  belongs_to :customer
+  has_one :customer
   belongs_to :bill
 
 end

@@ -1,25 +1,112 @@
-<p id="notice"><%= notice %></p>
+<div class="container">
 
-<h1>Invoices</h1>
+  <p id="notice"><%= notice %></p>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item">
+    <a class="nav-link" id="pending-tab" data-toggle="tab" href="#pending" role="tab" aria-controls="pending" aria-selected="false">บิล ยังไม่ต้องแจ้งหนี้</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link " id="active-tab" data-toggle="tab" href="#active" role="tab" aria-controls="active" aria-selected="false">บิล ถึงเวลาแจ้งหนี้</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link active" id="invoiced-tab" data-toggle="tab" href="#invoiced" role="tab" aria-controls="invoiced" aria-selected="true">บิล แจ้งหนี้แล้ว</a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <%# pending %>
+  <div class="tab-pane fade" id="pending" role="tabpanel" aria-labelledby="pending-tab">
+    pending
+  </div>
 
-  <tbody>
-    <% @invoices.each do |invoice| %>
+  <%# active %>
+  <div class="tab-pane fade" id="active" role="tabpanel" aria-labelledby="active-tab">
+  <br>
+    <h4>รายการใบแจ้งหนี้</h4>
+    <table border="1" style="width:500px;">
       <tr>
-        <td><%= link_to 'Show', invoice %></td>
-        <td><%= link_to 'Edit', edit_invoice_path(invoice) %></td>
-        <td><%= link_to 'Destroy', invoice, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <th style="padding:5px 10px;">bill_no</th>
+        <th style="padding:5px 10px;">due_date</th>
+        <th style="padding:5px 10px;">status</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+      <% @bills.each do |bill| %>
+        <tr onclick="document.location = '/invoices/<%= bill.id %>/<%= bill.customer_id %>/new'">
+       
 
-<br>
+          <td style="padding:5px 10px;"><%= bill.bill_no %></td>
+          
+        <% if bill.due_date.month == 1  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> ม.ค. <%= bill.due_date.year %></td>
+        <% elsif bill.due_date.month == 2  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> ก.พ. <%= bill.due_date.year %></td>
+        <% elsif bill.due_date.month == 3  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> มี.ค. <%= bill.due_date.year %></td>
+        <% elsif bill.due_date.month == 4  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> เม.ษ. <%= bill.due_date.year %></td>
+        <% elsif bill.due_date.month == 5  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> พ.ค. <%= bill.due_date.year %></td>
+        <% elsif bill.due_date.month == 6  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> มิ.ย. <%= bill.due_date.year %></td>
+        <% elsif bill.due_date.month == 7  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> ก.ค. <%= bill.due_date.year %></td>
+        <% elsif bill.due_date.month == 8  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> ส.ค. <%= bill.due_date.year %></td>
+        <% elsif bill.due_date.month == 9  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> ก.ย. <%= bill.due_date.year %></td>
+        <% elsif bill.due_date.month == 10  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> ต.ค. <%= bill.due_date.year %></td>
+        <% elsif bill.due_date.month == 11  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> พ.ย. <%= bill.due_date.year %></td>
+        <% else  %>
+          <td style="padding:5px 10px;"><%= bill.due_date.day %> ธ.ค. <%= bill.due_date.year %></td>
+        
+        <% end %>
 
-<%= link_to 'New Invoice', new_invoice_path %>
+      
+        <% if @t.day == bill.due_date.day  %>
+          <td style="padding:5px 10px;color:orange;" align="center">ถึงเวลาแจ้งหนี้</td>
+        <% elsif @t.day > bill.due_date.day  %>
+          <td style="padding:5px 10px;color:red;" align="center">เลยกำหนดชำระแล้ว</td>
+        <% elsif @t.day < bill.due_date.day  %>
+          <td style="padding:5px 10px;color:red;" align="center">ยังไม่ถึงกำหนดแจ้งหนี้</td>
+        <% end %>
+        </a>
+        </tr>
+        
+      <% end %>
+    </table>
+ 
+  </div>
+
+  <%# Invoices %>
+  <div class="tab-pane fade show active" id="invoiced" role="tabpanel" aria-labelledby="invoiced-tab">
+    <br>
+    <h4>รายการแจ้งหนี้แล้ว</h4>
+    <table border="1" style="width:500px;">
+      <tr>
+        <th style="padding:5px 10px;">Bill ID</th>
+        <th style="padding:5px 10px;">Invoices User</th>
+        <th style="padding:5px 10px;">Amount</th>
+        <th style="padding:5px 10px;">Invoices Date</th>
+        
+      </tr>
+      <% @invoices.each do |invoices| %>
+      
+        <tr>
+          <td><%= invoices.bill_id %></td>
+          <td><%= invoices.invoice_user %></td>
+          <td><%= invoices.amount %></td>
+          <td><%= invoices.invoice_date %></td>
+        </tr>
+        
+      <% end %>
+    </table>
+  </div>
+</div>
+
+
+<hr>
+<a href="/customers">รายการลูกค้า</a>
+</div>
+
+

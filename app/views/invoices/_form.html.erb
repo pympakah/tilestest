@@ -1,17 +1,54 @@
-<%= form_with(model: invoice, local: true) do |form| %>
-  <% if invoice.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(invoice.errors.count, "error") %> prohibited this invoice from being saved:</h2>
+<form method="GET" actions="/invoices/create">
+<%# <%= form_with(model: invoice, local: true) do |form|   %>
+  <% if invoice.id? %>
+      <% @bills.each do |bill| %> 
+      
+      <table>
+      
+      <tr>
+      <td>เลขที่ใบแจ้งหนี้</td><td><input type="text" size="50" name="bill_no" value="<%= bill.bill_no %>"></td>
+      <tr>
+      
+      <% @customers.each do |customer| %>
+      <input type="hidden" name="cus_id" value="<%= customer.id %>"> 
+      <td>ชื่อลูกค้า</td><td><input type="text" size="50" name="name" value="<%= customer.name %>"></td>
+      <% end %>
+      </tr>
+      <tr>
+      <td>จำนวน</td><td><input type="number" name="amount" value="<%= bill.amount  %>"></td>
+      </tr>
+      <tr>
+      <% if @t.month == 1 %>
+          <% @a = "01" %>
+      <% elsif @t.month == 2 %>
+          <% @a = "02" %>
+      <% elsif @t.month == 3 %>
+          <% @a = "03" %>
+      <% elsif @t.month == 4 %>
+          <% @a = "04" %>
+      <% elsif @t.month == 5 %>
+          <% @a = "05" %>
+      <% elsif @t.month == 6 %>
+          <% @a = "06" %>
+      <% elsif @t.month == 7 %>
+          <% @a = "07" %>
+      <% elsif @t.month == 8 %>
+          <% @a = "08" %>
+      <% elsif @t.month == 9 %>
+          <% @a = "09" %>
+      <% elsif @t.month == 10 %>
+          <% @a = "10" %>     
+      <% elsif @t.month == 11 %>
+          <% @a = "11" %>
+      <% else %>
+          <% @a = "12" %>  
+      <% end %>
+      <td>วันที่สร้างใบแจ้งหนี้</td><td><input type="text" name="date" value="<%= @t.year %>-<%= @a %>-<%= @t.day %>"></td>
+      </tr>
+      </table>
+      <% end %>
+ <% end %>
 
-      <ul>
-        <% invoice.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
-        <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+ <br>
+<input type="submit">
+</form>

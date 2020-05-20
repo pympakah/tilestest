@@ -4,12 +4,13 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = Customer.all
+    @customers = Customer.all.order("id")
   end
 
   # GET /customers/1
   # GET /customers/1.json
   def show
+    puts "Hello Wordss"
   end
 
   # GET /customers/new
@@ -19,22 +20,18 @@ class CustomersController < ApplicationController
 
   # GET /customers/1/edit
   def edit
+    @customers = Customer.where(id:set_customer)
+
   end
 
   # POST /customers
   # POST /customers.json
   def create
-    @customer = Customer.new(customer_params)
-
-    respond_to do |format|
-      if @customer.save
-        format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
-        format.json { render :show, status: :created, location: @customer }
-      else
-        format.html { render :new }
-        format.json { render json: @customer.errors, status: :unprocessable_entity }
-      end
-    end
+        i = Customer.new
+        i.name = params[:name]
+        i.credit = params[:credit]
+        i.save
+        redirect_to '/customers'
   end
 
   # PATCH/PUT /customers/1
@@ -42,7 +39,12 @@ class CustomersController < ApplicationController
   def update
     respond_to do |format|
       if @customer.update(customer_params)
-        format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
+        i = Customer.find(params[:id])
+        i.name = params[:name]
+        i.credit = params[:credit]
+        i.save
+
+        format.html { redirect_to '/customers', notice: 'Customer was successfully updated.' }
         format.json { render :show, status: :ok, location: @customer }
       else
         format.html { render :edit }
@@ -54,7 +56,9 @@ class CustomersController < ApplicationController
   # DELETE /customers/1
   # DELETE /customers/1.json
   def destroy
-    @customer.destroy
+    i = Customer.find(params[:id])
+    i.destroy
+    # @customer.destroy
     respond_to do |format|
       format.html { redirect_to customers_url, notice: 'Customer was successfully destroyed.' }
       format.json { head :no_content }
@@ -71,4 +75,6 @@ class CustomersController < ApplicationController
     def customer_params
       params.fetch(:customer, {})
     end
+
+    
 end

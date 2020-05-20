@@ -4,12 +4,31 @@ class BillsController < ApplicationController
   # GET /bills
   # GET /bills.json
   def index
-    @bills = Bill.all
+    # @bills = Bill.all
+    @invoices = Invoice.all.order("id")
+
+    invoices = Invoice.all.order("id")
+    arr = []
+    invoices.each do |invo| 
+      a = ""
+      if a != invo.bill_id
+        arr.push(invo.bill_id) 
+        a = invo.bill_id
+      end
+    end
+    # puts arr
+    @bills = Bill.where.not(id: arr)
+
+    @t = Time.now
+    # r = Time.now
+    # puts r.month
   end
+  
 
   # GET /bills/1
   # GET /bills/1.json
   def show
+    
   end
 
   # GET /bills/new
@@ -40,6 +59,7 @@ class BillsController < ApplicationController
   # PATCH/PUT /bills/1
   # PATCH/PUT /bills/1.json
   def update
+    
     respond_to do |format|
       if @bill.update(bill_params)
         format.html { redirect_to @bill, notice: 'Bill was successfully updated.' }

@@ -1,4 +1,4 @@
 class Bill < ApplicationRecord
-  belongs_to :customer
-  has_one :invoice
+  has_one :customer
+  belongs_to :invoice
 end

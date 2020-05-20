@@ -1,3 +1,5 @@
+
+
 <%= form_with(model: customer, local: true) do |form| %>
   <% if customer.errors.any? %>
     <div id="error_explanation">
@@ -9,8 +11,32 @@
         <% end %>
       </ul>
     </div>
-  <% end %>
+  <% end %> 
+  
+  <% if customer.id? %>
+        <% @customers.each do |customerss| %>
+                <table>
+                <input type="hidden" name="id" value="<%= customerss.id %>">
+                <tr>
+                <td>ชื่อลูกค้า</td><td><input type="text" name="name" value="<%= customerss.name %>"></td>
+                </tr>
+                <tr>
+                <td>วงเงิน</td><td><input type="number" max="10" name="credit" value="<%= customerss.credit %>"></td>
+                </tr>
+                </table>
+            <% end %>
+  <% else %>
+        <table>
+        <tr>
+        <td>ชื่อลูกค้า</td><td><input type="text" name="name" value=""></td>
+        </tr>
+        <tr>
+        <td>วงเงิน</td><td><input type="number" max="10" name="credit" value=""></td>
+        </tr>
+        </table>
 
+  <% end %>
+   <br> 
   <div class="actions">
     <%= form.submit %>
   </div>
